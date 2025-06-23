@@ -1,0 +1,2 @@
+# tamagotchi
+Tamagotchi Jueves Js
