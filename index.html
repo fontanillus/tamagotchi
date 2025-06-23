@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tamagotchi JavaScript</title>
+    <link rel="stylesheet" href="./css/estilo.css">
+
+</head>
+
+<body>
+    <h1>Cuida de tu Tamagotchi</h1>
+
+    <div>
+        <label for="nombre">Por favor indica el nombre de tu Tamagotchi:</label>
+        <input type="text" id="nombre" required />
+        <button onclick="crearTamagotchi()">Crear Tamagotchi</button>
+        <p id="mensaje"></p>
+    </div>
+    <br>
+    <div id="infoMascota">
+        <h2 id="nombreMascota" style="display: none;"></h2> <!-- Oculto al inicio -->
+
+        <div id="contenedorMascota">
+            <aside id="imagenMascota" style="display: none;"></aside> <!-- Oculto al inicio -->
+
+            <main id="estado">
+                <p>Salud: <span id="salud"></span> (<span id="valorSalud">0</span>)</p>
+                <p>Felicidad: <span id="textoFelicidad"></span> (<span id="valorFelicidad">0</span>)</p>
+                <p>Limpieza: <span id="textoLimpieza"></span> (<span id="valorLimpieza">0</span>)</p>
+                <p>Energía: <span id="textoEnergia"></span> (<span id="valorEnergia">0</span>)</p>
+            </main>
+        </div>
+    </div>
+
+    <br>
+
+    <div id="actividades" style="display:none;">
+        <h3>Actividades</h3>
+        <button onclick="alimentar()">🍎 Alimentar</button>
+        <button onclick="jugar()">🎾 Jugar</button>
+        <button onclick="dormir()">😴 Dormir</button>
+        <button onclick="vacunar()">💉 Vacunar</button>
+        <button onclick="duchar()">🛁 Duchar</button>
+        <button onclick="reprender()">📛 Reprender</button>
+        <button onclick="acariciar()">💖 Acariciar</button>
+    </div>
+
+    <script>
+        let tamagotchi = null;
+
+        function crearTamagotchi() {
+            const nombreInput = document.getElementById("nombre");
+            const mensaje = document.getElementById("mensaje");
+            const actividades = document.getElementById("actividades");
+            const infoMascota = document.getElementById("infoMascota");
+            const nombre = nombreInput.value.trim();
+
+            if (nombre === "") {
+                mensaje.style.color = "red";
+                mensaje.innerHTML = "Por favor ingresa un nombre válido.";
+                return;
+            }
+
+            mensaje.innerHTML = "";
+            actividades.style.display = "block";
+            infoMascota.style.display = "block";
+
+            tamagotchi = {
+                nombre: nombre,
+                salud: (0),
+                felicidad: (0),
+                limpieza: (0),
+                energia: (0)
+            };
+
+            document.getElementById("nombreMascota").innerText = `Tamagotchi: ${nombre}`;
+            document.getElementById("nombreMascota").style.display = "block";
+            document.getElementById("imagenMascota").style.display = "block";
+
+            mostrarEstado("¡Tu mascota ha nacido!", "img/nacido.jpg", "Mascota nacida");
+        }
+
+        function mostrarEstado(mensajeTexto = "", imagenSrc = "", imagenAlt = "") {
+            if (!tamagotchi) return;
+
+            document.getElementById('salud').innerHTML = "⬛".repeat(tamagotchi.salud);
+            document.getElementById('textoFelicidad').innerHTML = "⬛".repeat(tamagotchi.felicidad);
+            document.getElementById('textoLimpieza').innerHTML = "⬛".repeat(tamagotchi.limpieza);
+            document.getElementById('textoEnergia').innerHTML = "⬛".repeat(tamagotchi.energia);
+
+            document.getElementById('valorSalud').innerText = tamagotchi.salud;
+            document.getElementById('valorFelicidad').innerText = tamagotchi.felicidad;
+            document.getElementById('valorLimpieza').innerText = tamagotchi.limpieza;
+            document.getElementById('valorEnergia').innerText = tamagotchi.energia;
+
+            const mensaje = document.getElementById("mensaje");
+            mensaje.style.color = "green";
+            mensaje.innerHTML = mensajeTexto;
+
+            const imagenMascota = document.getElementById("imagenMascota");
+            if (imagenSrc) {
+                imagenMascota.innerHTML = `<img src="${imagenSrc}" alt="${imagenAlt}">`;
+            } else {
+                imagenMascota.innerHTML = "";
+            }
+        }
+
+        function limitarValores() {
+            for (let key in tamagotchi) {
+                if (key !== "nombre") {
+                    tamagotchi[key] = Math.max(0, Math.min(10, tamagotchi[key]));
+                }
+            }
+        }
+
+        function alimentar() {
+            tamagotchi.energia += 3;
+            tamagotchi.felicidad += 2;
+            limitarValores();
+            mostrarEstado("Has alimentado a tu Tamagotchi 🍎", "img/comer.avif", "Mascota alimentada");
+        }
+
+        function jugar() {
+            tamagotchi.felicidad += 2;
+            tamagotchi.energia -= 2;
+            tamagotchi.limpieza -= 1;
+            limitarValores();
+            mostrarEstado("Jugaste con tu Tamagotchi 🎾", "img/jugar.avif", "Mascota ha jugado");
+        }
+
+        function dormir() {
+            tamagotchi.energia += 5;
+            tamagotchi.salud += 2;
+            tamagotchi.limpieza -= 2;
+            limitarValores();
+            mostrarEstado("Tu Tamagotchi ha dormido 😴", "img/dormir.avif", "Mascota ha dormido");
+        }
+
+        function vacunar() {
+            tamagotchi.salud += 5;
+            tamagotchi.felicidad -= 6;
+            limitarValores();
+            mostrarEstado("Vacunaste a tu Tamagotchi 💉", "img/vacunar.avif", "Mascota ha sido vacunada");
+        }
+
+        function duchar() {
+            tamagotchi.salud += 3;
+            tamagotchi.limpieza += 5;
+            limitarValores();
+            mostrarEstado("Bañaste a tu Tamagotchi 🛁", "img/duchar.avif", "Mascota se ha duchado");
+        }
+
+        function reprender() {
+            tamagotchi.felicidad -= 3;
+            limitarValores();
+            mostrarEstado("Reprendiste a tu Tamagotchi 📛", "img/reprender.avif", "Mascota ha sido reprendida");
+        }
+
+        function acariciar() {
+            tamagotchi.felicidad += 4;
+            limitarValores();
+            mostrarEstado("Acariciaste a tu Tamagotchi 💖", "img/caricias.avif", "Mascota ha sido acariciada");
+        }
+    </script>
+</body>
+
+</html>
