@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Tamagotchi JavaScript</title>
+    <link rel="stylesheet" href="./css/normalize.css">
     <link rel="stylesheet" href="./css/estilo.css">
 
 </head>
@@ -20,10 +21,10 @@
     </div>
     <br>
     <div id="infoMascota">
-        <h2 id="nombreMascota" style="display: none;"></h2> <!-- Oculto al inicio -->
+        <h2 id="nombreMascota"></h2> 
 
         <div id="contenedorMascota">
-            <aside id="imagenMascota" style="display: none;"></aside> <!-- Oculto al inicio -->
+            <aside id="imagenMascota"></aside> 
 
             <main id="estado">
                 <p>Salud: <span id="salud"></span> (<span id="valorSalud">0</span>)</p>
@@ -36,7 +37,7 @@
 
     <br>
 
-    <div id="actividades" style="display:none;">
+    <div id="actividades">
         <h3>Actividades</h3>
         <button onclick="alimentar()">🍎 Alimentar</button>
         <button onclick="jugar()">🎾 Jugar</button>
